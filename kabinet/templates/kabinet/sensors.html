@@ -1,0 +1,67 @@
+{% extends ".//base.html" %}
+
+{% block title %} My sensors {% endblock %}
+
+{% block body %}
+<div class="container py-1">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card rounded-0 border-0 shadow">
+                <div class="card-body p-5">
+                    
+                    <!--  Bootstrap table-->
+                    <h1>Sensors list</h1>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="sensorTable">
+                            <thead class="table-info">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Longitude</th>
+                                    <th scope="col">Latitude</th>
+                                    <th scope="col">Details</th>
+                                    <th scope=""></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in sensor_list %}
+                                <tr>
+                                    <td> {{s.name}} </td> 
+                                    <td> {{s.lon}} </td>
+                                    <td> {{s.lat}} </td>
+                                    
+                                    <td><button class="btn btn-info rounded-0" id ="details"><i class="fa fa-bar-chart"></i></button</td>
+                                    <td></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        
+                    </div>
+
+                    <!-- Add rows button-->
+                    <a class="btn btn-primary rounded-0 btn-block" id="insertRow" href="#">Add new row</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+$(function () {
+
+    $("#insertRow").on("click", function (event) {
+        event.preventDefault();
+
+        $('#sensorTable').find('tbody').append('<tr><form action="/kabinet/sensors/newSensor/" method="POST">{% csrf_token %}<td class="col-sm-3"><input type="text" id="nameSensor" name="nameSensor" placeholder="Name" class="form-control" ></td><td><input type="number" id="lonSensor" name="lonSensor" placeholder="Longitude" class="form-control" ></td><td class="col-sm-2"><input type="number" id="latSensor" name="latSensor" placeholder="latitude" class="form-control" ></td><td><button type=submit class="btn btn-success rounded-0" id ="saveRow"><i class="fa fa-save" ></i></button></td></form><td><button class="btn btn-danger rounded-0" id ="deleteRow"><i class="fa fa-trash"></i></button></td><tr>');    
+    });
+
+    // Remove row when delete btn is clicked
+    $("table").on("click", "#deleteRow", function (event) {
+        $(this).closest("tr").remove();
+
+    });
+    
+});
+</script>
+{% endblock %}
