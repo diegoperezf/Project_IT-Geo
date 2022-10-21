@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.views import generic
 from kabinet.models import Sensor
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -17,14 +18,13 @@ def SensorsView(request):
     sensor_list = Sensor.objects.all()
     return render(request, "kabinet/sensors.html", {"sensor_list" : sensor_list})
 
+@csrf_exempt
 def NewSensor(request):
-    nName = request.POST('nameSensor')
-    nLon = request.POST('lonSensor')
-    nLat = request.POST('latSensor')
+    nName = request.POST.get('name')
+    nLon = int(request.POST.get('lon'))
+    nLat = int(request.POST.get('lat'))
     nSensor = Sensor.objects.create(name=nName, lon=nLon, lat=nLat)
     return redirect('/kabinet/sensors/')
-
-
 
 class DetailView(generic.DetailView):
     model = Sensor
