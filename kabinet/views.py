@@ -8,11 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
-class UsersView(generic.ListView):
-    template_name = 'kabinet/users.html'
-
-#class SensorsView(generic.ListView):
-#    template_name = 'kabinet/sensors.html'
+def UsersView(request):
+    return render(request, "kabinet/users.html")
 
 def SensorsView(request):
     sensor_list = Sensor.objects.all()
