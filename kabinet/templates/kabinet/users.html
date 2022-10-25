@@ -1,1 +1,22 @@
 {% extends ".//base.html" %}
+
+{% block title %} My site {% endblock %}
+{% block body %}
+
+<div class="container py-1">
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="card rounded-0 border-0 shadow">
+                <div class="card-body p-5">
+                    <h1>Tasks</h1>
+                    <div class="d-flex justify-content-center links">
+                        <a href="{% url 'kabinet:sensors' %}" class="ml-2">Sensor management</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
