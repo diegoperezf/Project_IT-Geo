@@ -46,14 +46,16 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+{% csrf_token %}
 <script>
-
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 $(function () {
 
     $("#insertRow").on("click", function (event) {
         event.preventDefault();
 
-        $('#sensorTable').find('tbody').append('<tr><td class="col-sm-3"><input type="text" placeholder="Name" class="form-control" ></td><td><input type="text" placeholder="Longitude" class="form-control" ></td><td class="col-sm-2"><input type="text" placeholder="latitude" class="form-control" ></td><td><button type=submit class="btn btn-success rounded-0" id ="saveRow"><i class="fa fa-save" ></i></button></td></form><td><button class="btn btn-danger rounded-0" id ="deleteRow"><i class="fa fa-trash"></i></button></td></tr>');    
+        $('#sensorTable').find('tbody').append('<tr><td class="col-sm-3"><input type="text" placeholder="Name" class="form-control" ></td><td><input type="text" placeholder="Longitude" class="form-control" ></td><td class="col-sm-2"><input type="text" placeholder="latitude" class="form-control" ></td><td><button type=submit class="btn btn-success rounded-0" id ="saveRow"><i class="fa fa-save" ></i></button></td><td><button class="btn btn-danger rounded-0" id ="deleteRow"><i class="fa fa-trash"></i></button></td></tr>');    
     });
 
     // Remove row when delete btn is clicked
@@ -63,17 +65,24 @@ $(function () {
     });
     // Save row data when save btn is clicked
     $("table").on("click", "#saveRow", function (event) {
-	var sensor_data = { name : $(this).closest("tr")[0].children[0].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lat : $(this).closest("tr")[0].children[2].children[0].value};
-    alert("Data collected: name = " + sensor_data.name);
-    $.post("/kabinet/sensors/", 
-       {
-            "name" : sensor_data.name,
-            "lon" : sensor_data.lon,
-            "lat" : sensor_data.lat
-        })
-    
-    });
-
+        var sensor_data = { name : $(this).closest("tr")[0].children[0].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lat : $(this).closest("tr")[0].children[2].children[0].value};
+        alert("Data collected: name = " + sensor_data.name);
+        
+        
+        $.ajax({
+            method: 'POST',
+            url:'/kabinet/sensors/newSensor/',
+            data: {
+            name : sensor_data.name,
+            lon : sensor_data.lon,
+            lat : sensor_data.lat
+            },
+            beforeSend: function (xhr){
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+            success: function(){alert('Data succesfully posted')}
+        });
+    });  
 });
 </script>
 {% endblock %}
