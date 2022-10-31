@@ -67,21 +67,22 @@ $(function () {
     $("table").on("click", "#saveRow", function (event) {
         var sensor_data = { name : $(this).closest("tr")[0].children[0].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lon : $(this).closest("tr")[0].children[1].children[0].value, lat : $(this).closest("tr")[0].children[2].children[0].value};
         alert("Data collected: name = " + sensor_data.name);
-        
-        
         $.ajax({
             method: 'POST',
-            url:'/kabinet/sensors/newSensor/',
-            data: {
-            name : sensor_data.name,
-            lon : sensor_data.lon,
-            lat : sensor_data.lat
-            },
+            url:"{% url 'kabinet:newSensor' %}",
+            dataType : 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({
+            'name' : sensor_data.name,
+            'lon' : sensor_data.lon,
+            'lat' : sensor_data.lat
+            }),
+            processData: false,
             beforeSend: function (xhr){
                 xhr.setRequestHeader('X-CSRFToken', csrftoken);
                 },
-            success: function(){alert('Data succesfully posted')}
-        });
+            success: function(data){var response = JSON.parse(data); if(response['success'] == 1); }}
+            );
     });  
 });
 </script>
