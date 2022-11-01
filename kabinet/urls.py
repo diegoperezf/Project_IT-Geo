@@ -3,8 +3,8 @@ from . import views
 
 app_name = 'kabinet'
 urlpatterns = [
-    path('', views.UsersView, name='users'),
-    path('sensors/', views.SensorsView, name='sensors'),
+    path('', views.users_view, name='users'),
+    path('sensors/', views.sensors_view, name='sensors'),
     path('sensors/<name>/', views.DetailView.as_view(), name='detail'),
-    path('sensors/newSensor/', views.NewSensor, name='newSensor')
+    path('sensors/newSensor', views.new_sensor, name='newSensor')
 ]

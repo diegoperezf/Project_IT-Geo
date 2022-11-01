@@ -81,7 +81,7 @@ $(function () {
             beforeSend: function (xhr){
                 xhr.setRequestHeader('X-CSRFToken', csrftoken);
                 },
-            success: function(data){var response = JSON.parse(data); if(response['success'] == 1); }}
+            success: function(data){if (data['success']==1){alert("Sensor insterted");} }}
             );
     });  
 });
