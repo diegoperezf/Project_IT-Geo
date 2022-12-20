@@ -10,7 +10,7 @@ from influxdb_client.client.bucket_api import BucketsApi
 from influxdb_client.client.query_api import QueryApi
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-from api.sensor import Sensor
+from sensorsdb.api.sensor import Sensor
 
 # Get the configuration key-value pairs.
 
