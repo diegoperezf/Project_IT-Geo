@@ -5,12 +5,12 @@
     <title>Buckets</title>
 </head>
 <body>
-{% extends 'base.html' %}
+{% extends 'sensorsdb/base.html' %}
 {% block content %}
 
 <ul>
 {% for bucket in buckets %}
-    <li>{{ bucket['name'] }}</li>
+    <li>{{ bucket }}</li>
 {% endfor %}
 </ul>
 {% endblock %}

@@ -7,34 +7,34 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+   
     <title>{% block title %} {% endblock %}</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('index')}}">IoT Center</a>
+        <a class="navbar-brand" >IoT Center</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li>
-                    <a class="nav-link" href="{{url_for('get_devices')}}">Devices</a>
+                    <a class="nav-link" >Devices</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{url_for('create')}}">Create Device</a>
+                    <a class="nav-link" >Create Device</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{url_for('write')}}">Write Data</a>
+                    <a class="nav-link" >Write Data</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{url_for('data')}}">Query Data</a>
+                    <a class="nav-link" >Query Data</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{url_for('get_buckets')}}">Buckets</a>
+                    <a class="nav-link" >Buckets</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{url_for('auth')}}">Auth</a>
+                    <a class="nav-link" >Auth</a>
                 </li>
             </ul>
         </div>
