@@ -1,5 +1,7 @@
 # Import the dependencies.
+from cgi import print_environ
 import configparser
+import json
 from datetime import datetime
 from uuid import uuid4
 import os
@@ -15,7 +17,6 @@ from sensorsdb.api.sensor import Sensor
 from influxdb_client.domain.dialect import Dialect
 
 # Get the configuration key-value pairs.
-#file_con = '/home/diegopf/Documents/Project_dp/Project_IT-Geo-1/sensorsdb/api/config.ini'
 file_con = 'sensorsdb/api/config.ini'
 config = configparser.ConfigParser()
 config.read(file_con)
@@ -98,6 +99,7 @@ def write_measurement(device_id):
                                      token=config.get('APP', 'INFLUX_TOKEN'),
                                      org=config.get('APP', 'INFLUX_ORG'))
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+
     virtual_device = Sensor()
     coord = virtual_device.geo()
 
@@ -115,7 +117,7 @@ def write_measurement(device_id):
 
     print(f"Writing: {point.to_line_protocol()}")
     client_response = write_api.write(bucket=config.get('APP', 'INFLUX_BUCKET'), record=point)
-
+    print(client_response)
     # write() returns None on success
     if client_response is None:
         # TODO Maybe also return the data that was written
@@ -125,15 +127,20 @@ def write_measurement(device_id):
     return None
 
 
-def get_measurements(query):
+def get_measurements(device_id):
     influxdb_client = InfluxDBClient(url=config.get('APP', 'INFLUX_URL'),
                                      token=config.get('APP', 'INFLUX_TOKEN'),
                                      org=config.get('APP', 'INFLUX_ORG'))
 
     # Queries must be formatted with single and double quotes correctly
+    query = f'from(bucket:"{config.get("APP", "INFLUX_BUCKET")}")'\
+            f'|> range(start: -10d)'\
+            f'|> filter(fn:(r) => r._measurement == "environment")'\
+            f'|> filter(fn:(r) => r.device == "{device_id}")'\
+            f'|> filter(fn:(r) => r._field == "Temperature")'
+    
     query_api = QueryApi(influxdb_client)
-    result = query_api.query_csv(query,
-                                   dialect=Dialect(
+    result = query_api.query_csv(query,dialect=Dialect(
                                        header=True,
                                        delimiter=",",
                                        comment_prefix="#",
@@ -143,6 +150,8 @@ def get_measurements(query):
     response = ''
     for row in result:
         response += (',').join(row) + ('\n')
+    print("This is response")
+    print(response)
     return response
 
 def get_buckets():

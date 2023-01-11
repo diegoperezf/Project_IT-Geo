@@ -5,14 +5,14 @@
     <title>Data</title>
 </head>
 <body>
-{% extends 'base.html' %}
+{% extends 'sensorsdb/base.html' %}
 {% block content %}
 
 
 
 {% if data is none %}
     <div>
-    <form method="post" action="/data">
+    <form method="post" action="">{% csrf_token %}
         <div class="form-group">
             <label for="deviceIdInput">IoT Device Name</label>
             <input type="text" class="form-control" id="deviceIdInput" name="device_id_input">
@@ -35,10 +35,10 @@
         <tbody>
           {% for result in data %}
             <tr>
-              <td>{{ result._time }}</td>
-                <td>{{ result.device }}</td>
-              <td>{{ result._field }}</td>
-              <td>{{ result._value }}</td>
+              <td>{{ result.time }}</td>
+                <td>{{ result.deviceId }}</td>
+              <td>{{ result.field }}</td>
+              <td>{{ result.value }}</td>
             </tr>
           {% endfor %}
         </tbody>

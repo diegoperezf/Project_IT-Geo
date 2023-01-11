@@ -5,11 +5,11 @@
     <title>Create</title>
 </head>
 <body>
-{% extends 'base.html' %}
+{% extends 'sensorsdb/base.html' %}
 {% block content %}
 
 <div>
-    <form method="post" action="/write">
+    <form method="post" action="">{% csrf_token %}
         <div class="form-group">
             <label for="deviceIdInput">IoT Device Name</label>
             <input type="text" class="form-control" id="deviceIdInput" name="device_id_input">

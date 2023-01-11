@@ -20,12 +20,11 @@ def sensors_view(request):
 def new_sensor(request):
     if request.method == 'POST':
         body = json.loads(request.body.decode("utf-8"))
-        print(body)
         nName = body['name'] 
         nLon = decimal.Decimal(body['lon'])
         nLat = decimal.Decimal(body['lat'])
-        print(nName, nLon, nLat)
         Sensor.objects.create(name=nName, lon=nLon, lat=nLat)
+        
         return JsonResponse({'success': 1, 'message': 'Sensor succesfully inserted'})
         
 

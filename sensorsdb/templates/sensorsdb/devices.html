@@ -5,7 +5,7 @@
     <title>Devices</title>
 </head>
 <body>
-{% extends 'base.html' %}
+{% extends 'sensorsdb/base.html' %}
 {% block content %}
 
 {% if data is none %}
@@ -26,10 +26,10 @@
         <tbody>
           {% for result in data %}
             <tr>
-              <td>{{ result._time }}</td>
+              <td>{{ result.time }}</td>
                 <td>{{ result.deviceId }}</td>
-              <td>{{ result._field }}</td>
-              <td>{{ result._value }}</td>
+              <td>{{ result.field }}</td>
+              <td>{{ result.value }}</td>
             </tr>
           {% endfor %}
         </tbody>

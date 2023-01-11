@@ -20,20 +20,20 @@ def get_devices(request):
         context = {'data': result}
         return render(request, 'sensorsdb/devices.html', context)
 
-
-#def create():         it creates a devices... connect to kabinet
 def create(request):
-    return render(request, 'sensorsdb/create.html', device_id=None)
+    context = {} # None
+    return render(request, 'sensorsdb/create.html', context)
 
-
-# On submit function for /create
 def create_device(request):
     if request.method == 'GET':
-        return render('sensorsdb/create.html', device_id=None)
+        context = {}
+        return render('sensorsdb/create.html', context)
     else:
-        device_id = request.form.get('device_id_input', None)
+        
+        device_id = request.POST['device_id_input']
         device_id = devices.create_device(device_id)
-        return render(request, 'sensorsdb/create.html', device_id=device_id)
+        context = {'device_id' : device_id}
+        return render(request, 'sensorsdb/create.html', context)
 
 
 def get_buckets(request):
@@ -43,28 +43,31 @@ def get_buckets(request):
     return render(request, 'sensorsdb/buckets.html', context)
 
 def auth(request):
-    if request.method == 'POST':
-        response = devices.create_authorization('test_id')
-        return render(request, 'sensorsdb/auth.html')
+    response = devices.create_authorization('test_id')
+    return render(request, 'sensorsdb/auth.html')
 
-#@app.route('/write', methods=['GET', 'POST'])
+
 def write(request):
     if request.method == 'GET':
-        return render('sensorsdb/write.html', device_id=None)
+        context =  {'device_id' : None} 
+        return render(request, 'sensorsdb/write.html', context)
     else:
-        device_id = request.form.get('device_id_input', None)
+        device_id = request.POST['device_id_input']
+        print(device_id)
+        device_id = [device_id]
+        #print(device_id)
         device_id = devices.write_measurements(device_id)
-        return render(request, 'sensorsdb/write.html', device_id=device_id)
+        print(device_id)
+        context =  {'device_id' : device_id}
+        return render(request, 'sensorsdb/write.html', context)
 
 
-#@app.route('/data', methods=['GET', 'POST'])
 def data(request):
-    
     if request.method == 'GET':
         context = {'data' : None}
         return render(request, 'sensorsdb/data.html', context)
     else:
-        device_id = request.form.get('device_id_input', None)
+        device_id = request.POST['device_id_input']
         results = devices.get_measurements(device_id)
         context = {'data' : results}
         return render(request, 'sensorsdb/data.html', context)

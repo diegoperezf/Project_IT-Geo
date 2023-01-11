@@ -19,22 +19,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li>
-                    <a class="nav-link" >Devices</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:devices' %}">Devices</a>
                 </li>
                 <li>
-                    <a class="nav-link" >Create Device</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:create' %}">Create Device</a>
                 </li>
                 <li>
-                    <a class="nav-link" >Write Data</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:write' %}">Write Data</a>
                 </li>
                 <li>
-                    <a class="nav-link" >Query Data</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:data' %}">Query Data</a>
                 </li>
                 <li>
-                    <a class="nav-link" >Buckets</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:buckets' %}">Buckets</a>
                 </li>
                 <li>
-                    <a class="nav-link" >Auth</a>
+                    <a class="nav-link" href="{% url 'sensorsdb:auth' %}">Auth</a>
                 </li>
             </ul>
         </div>
