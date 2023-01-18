@@ -11,5 +11,7 @@ urlpatterns = [
     path('data/', views.data, name='data'),
     path('create/', views.create, name='create'),
     path('create_device/', views.create_device, name='create_device'),
+    path('device_info/', views.info, name='device_info'),
+    path('graph/', views.graph, name='graph'),
 
 ]

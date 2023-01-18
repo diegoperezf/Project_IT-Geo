@@ -6,6 +6,7 @@ from kabinet.models import Sensor
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from sensorsdb.api import devices
 import json
 import decimal
 # Create your views here.
@@ -24,7 +25,7 @@ def new_sensor(request):
         nLon = decimal.Decimal(body['lon'])
         nLat = decimal.Decimal(body['lat'])
         Sensor.objects.create(name=nName, lon=nLon, lat=nLat)
-        
+        devices.create_device(device_id=nName)
         return JsonResponse({'success': 1, 'message': 'Sensor succesfully inserted'})
         
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Devices</title>
+</head>
+<body>
+{% extends 'sensorsdb/base.html' %}
+{% block body %}
+<div class="container py-1">
+  <div class="row">
+      <div class="col-lg-12 mx-auto">
+          <div class="card rounded-0 border-0 shadow">
+              <div class="card-body p-5">
+                <h1>Make a query</h1>
+                <form action="{% url 'sensorsdb:graph' %}" method="post">{% csrf_token %}
+                    <br><br>
+                    <label for="sensor">Select a device:</label>
+                    <br>
+                    <select name="sensor" id="sensor" value="sensor">
+                        {% for sensor in sensor_list %}
+                        <option value={{sensor}}>{{sensor}}</option>
+                        {% endfor %}
+                    </select>
+                    <br><br>
+                    <label>Select a parameter:</label>
+                    <br>
+                    <select name="field" id="field" value="field">
+                        <option value=Temperature>Temperature</option>
+                        <option value=Pressure>Pressure</option>
+                        <option value=Humidity>Humidity</option>
+                    </select>
+                    <br><br>
+                    <label>Select a time range:</label>
+                    <br>
+                    <label for="date_from">From:</label>
+                    <input type="date" id="date_from" name="date_from"><br>
+                    <label for="date_to">To:</label>
+                    <input type="date" id="date_to" name="date_to">
+                    <br><br>
+                    <input type="submit" value="Submit" onclick="submitData()">
+                </form>  
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+function submitData() {
+  // get the values of the fields, the selected option and the csrf token
+  var field = document.getElementById("field").value;
+  var date_from = document.getElementById("date_from").value;
+  var date_to = document.getElementById("date_to").value;
+  var sensor = document.getElementById("sensor").value;
+  var csrf_token = jQuery("[name=csrfmiddlewaretoken]").val();
+
+  // create an object with the data
+  var data = {'field': field, 'date_from': date_from, 'date_to': date_to, 'sensor': sensor};
+
+  // send the data to the Django view using an AJAX request
+  $.ajax({
+    type: "POST",
+    url: "{% url 'sensorsdb:graph' %}",
+    dataType : 'json',
+    data: data,
+    beforeSend: function (xhr){
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                },
+                success: function(response) {
+                  window.location.href = response.url;
+                },
+                error: function(xhr, status, error) {
+                  console.log("Error: " + error);
+                }
+  });
+}
+</script>
+{% endblock %}
+</body>
+</html>

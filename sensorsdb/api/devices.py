@@ -12,6 +12,7 @@ from influxdb_client.client.authorizations_api import AuthorizationsApi
 from influxdb_client.client.bucket_api import BucketsApi
 from influxdb_client.client.query_api import QueryApi
 from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client.client.flux_table import TableList
 
 from sensorsdb.api.sensor import Sensor
 from influxdb_client.domain.dialect import Dialect
@@ -127,7 +128,7 @@ def write_measurement(device_id):
     return None
 
 
-def get_measurements(device_id):
+def get_measurements(device_id, field):
     influxdb_client = InfluxDBClient(url=config.get('APP', 'INFLUX_URL'),
                                      token=config.get('APP', 'INFLUX_TOKEN'),
                                      org=config.get('APP', 'INFLUX_ORG'))
@@ -137,22 +138,23 @@ def get_measurements(device_id):
             f'|> range(start: -10d)'\
             f'|> filter(fn:(r) => r._measurement == "environment")'\
             f'|> filter(fn:(r) => r.device == "{device_id}")'\
-            f'|> filter(fn:(r) => r._field == "Temperature")'
+            f'|> filter(fn:(r) => r._field == "{field}")'
     
     query_api = QueryApi(influxdb_client)
-    result = query_api.query_csv(query,dialect=Dialect(
-                                       header=True,
-                                       delimiter=",",
-                                       comment_prefix="#",
-                                       annotations=['group', 'datatype', 'default'],
-                                       date_time_format="RFC3339"))
-    
-    response = ''
-    for row in result:
-        response += (',').join(row) + ('\n')
-    print("This is response")
-    print(response)
-    return response
+    result = query_api.query(query, org=config.get('APP', 'INFLUX_ORG'))
+    result = result.to_json(indent=4) 
+    result = json.loads(result)
+    value = []
+    time = []
+    for x in result: 
+        #time_temp = datetime.strptime(x['_time'], '%Y-%m-%dT%H:%M:%S.%f%z')
+        #time.append(time_temp) 
+        time.append(x['_time'])
+        value.append(x['_value'])
+        
+    print(value)
+    print(time)
+    return value, time
 
 def get_buckets():
     influxdb_client = InfluxDBClient(url=config.get('APP', 'INFLUX_URL'),
